@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StegoCraft - Advanced Steganography Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .custom-dropzone {
+        border: 2px dashed #4b5563;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      .custom-dropzone:hover,
+      .custom-dropzone.dragover {
+        border-color: #3b82f6;
+        background-color: rgba(59, 130, 246, 0.05);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 lg:p-8">
+    <!-- Navigation bar -->
+    <nav
+      class="bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700 rounded-lg"
+    >
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a href="#" class="flex items-center">
+          <svg
+            class="w-8 h-8 mr-2 text-blue-600"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <span
+            class="self-center text-2xl font-semibold whitespace-nowrap px-2 bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent"
+            >StegoCraft</span
+          >
+        </a>
+        <button
+          data-collapse-toggle="navbar-default"
+          type="button"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          aria-controls="navbar-default"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="w-5 h-5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 17 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 1h15M1 7h15M1 13h15"
+            />
+          </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+          <ul
+            class="font-medium flex flex-col items-center p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-800 dark:border-gray-700"
+          >
+            <li>
+              <a
+                href="index.html"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                aria-current="page"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="about.html"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >About</a
+              >
+            </li>
+            <li>
+              <a
+                href="feature.html"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Features</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                >How It Works</a
+              >
+            </li>
+            <div class="flex items-center ms-3 md:ms-0">
+              <button
+                id="theme-toggle"
+                type="button"
+                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-full text-sm p-2 transition duration-300 ease-in-out"
+              >
+                <!-- Light Icon -->
+                <svg
+                  id="theme-toggle-light-icon"
+                  class="w-6 h-6 hidden transition duration-300 ease-in-out"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm4.95 2.64a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06zM17.25 10a.75.75 0 010 1.5h-1.5a.75.75 0 010-1.5h1.5zm-2.24 5.36a.75.75 0 00-1.06 1.06l1.06 1.06a.75.75 0 001.06-1.06l-1.06-1.06zM10 17.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM5.36 15.24a.75.75 0 00-1.06 1.06l1.06 1.06a.75.75 0 001.06-1.06L5.36 15.24zM2.75 10a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5h-1.5zM4.7 4.7a.75.75 0 10-1.06 1.06L4.7 6.82a.75.75 0 001.06-1.06L4.7 4.7zM10 6a4 4 0 100 8 4 4 0 000-8z"
+                  ></path>
+                </svg>
+
+                <!-- Dark Icon -->
+                <svg
+                  id="theme-toggle-dark-icon"
+                  class="w-6 h-6 hidden transition duration-300 ease-in-out"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.293 13.293A8 8 0 016.707 2.707 8.001 8.001 0 1017.293 13.293z"
+                  ></path>
+                </svg>
+                <span class="sr-only">Toggle Theme</span>
+              </button>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- How It Works Section -->
+    <section
+      id="how-it-works"
+      class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 dark:bg-gray-900"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10">
+          <h2
+            class="text-3xl text-center font-extrabold text-gray-900 dark:text-white mb-4"
+          >
+            How It Works
+          </h2>
+          <p class="text-lg text-indigo-700 dark:text-indigo-300">
+            Learn how to easily hide and extract your data in three simple
+            steps.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12 mb-10">
+          <div class="relative">
+            <div
+              class="absolute top-0 left-1/2 -translate-x-1/2 w-1 bg-blue-500 h-full z-0 hidden md:block"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center relative z-10"
+            >
+              <div
+                class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center mx-auto mb-4"
+              >
+                <span class="text-xl font-bold">1</span>
+              </div>
+              <h3
+                class="text-xl font-semibold text-gray-900 dark:text-gray-300 mb-2"
+              >
+                Select Your Files
+              </h3>
+              <p class="text-gray-500 dark:text-gray-400">
+                Choose your cover file and the secret file you wish to
+                securely hide using this steganography tool.
+              </p>
+
+              <div
+                class="mt-4 bg-gray-100 dark:bg-gray-900 rounded-md p-3 text-sm text-gray-500 dark:text-gray-400"
+              >
+                <strong class="font-semibold">Tip:</strong> Larger cover files
+                are recommended.
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div
+              class="absolute top-0 left-1/2 -translate-x-1/2 w-1 bg-blue-500 h-full z-0 hidden md:block"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center relative z-10"
+            >
+              <div
+                class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto mb-4"
+              >
+                <span class="text-xl font-bold">2</span>
+              </div>
+              <h3
+                class="text-xl font-semibold text-gray-900 dark:text-gray-300 mb-2"
+              >
+                Choose Security Options
+              </h3>
+              <p class="text-gray-500 dark:text-gray-400">
+                Select your preferred algorithm and optionally add a password
+                for enhanced security.
+              </p>
+              <div
+                class="mt-4 bg-gray-100 dark:bg-gray-900 rounded-md p-3 text-sm text-gray-500 dark:text-gray-400"
+              >
+                <strong class="font-semibold">Options:</strong> LSB, DCT, DWT,
+                Encryption.
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div
+              class="absolute top-0 left-1/2 -translate-x-1/2 w-1 bg-blue-500 h-full z-0 hidden md:block"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center relative z-10"
+            >
+              <div
+                class="w-12 h-12 rounded-full bg-indigo-500 text-white flex items-center justify-center mx-auto mb-4"
+              >
+                <span class="text-xl font-bold">3</span>
+              </div>
+              <h3
+                class="text-xl font-semibold text-gray-900 dark:text-gray-300 mb-2"
+              >
+                Process and Download
+              </h3>
+              <p class="text-gray-500 dark:text-gray-400">
+                Process your files and download the steganographic file
+                containing your hidden data.
+              </p>
+              <div
+                class="mt-4 bg-gray-100 dark:bg-gray-900 rounded-md p-3 text-sm text-gray-500 dark:text-gray-400"
+              >
+                <strong class="font-semibold">Important:</strong> Keep your
+                password safe.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Extracting Hidden Data
+          </h3>
+          <p class="text-lg text-gray-500 dark:text-gray-400 mb-6">
+            To extract hidden data, navigate to the "Extract Data" tab, upload
+            your steganographic file, enter the password if encryption was used,
+            and click "Extract Data." The application will recover and allow you
+            to download the original secret file.
+          </p>
+          <div
+            class="p-4 border border-blue-300 bg-blue-50 dark:bg-gray-900 dark:border-blue-800 rounded-lg"
+          >
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-5 w-5 text-blue-600 dark:text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <div class="ml-3 text-sm text-blue-700 dark:text-blue-400">
+                <h4 class="font-medium">Important</h4>
+                <p>
+                  Always use the same algorithm for extraction that was used
+                  during the hiding process.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const themeToggleBtn = document.getElementById("theme-toggle");
+        const themeToggleDarkIcon = document.getElementById(
+          "theme-toggle-light-icon"
+        );
+        const themeToggleLightIcon = document.getElementById(
+          "theme-toggle-dark-icon"
+        );
+
+        // Cek apakah tema sudah disimpan di local storage
+        if (
+          localStorage.getItem("color-theme") === "dark" ||
+          (!("color-theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          themeToggleLightIcon.classList.remove("hidden");
+          document.documentElement.classList.add("dark");
+        } else {
+          themeToggleDarkIcon.classList.remove("hidden");
+        }
+
+        themeToggleBtn.addEventListener("click", () => {
+          // Toggle icon
+          themeToggleDarkIcon.classList.toggle("hidden");
+          themeToggleLightIcon.classList.toggle("hidden");
+
+          // Ubah tema di root element
+          document.documentElement.classList.toggle("dark");
+
+          // Simpan preferensi tema di local storage
+          if (document.documentElement.classList.contains("dark")) {
+            localStorage.setItem("color-theme", "dark");
+          } else {
+            localStorage.setItem("color-theme", "light");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

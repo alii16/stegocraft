@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StegoCraft - Advanced Steganography Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 lg:p-8">
+    <!-- Navigation bar -->
+    <nav
+      class="bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700 rounded-lg"
+    >
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a href="#" class="flex items-center">
+          <svg
+            class="w-8 h-8 mr-2 text-blue-600"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <span
+            class="self-center text-2xl font-semibold whitespace-nowrap px-2 bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent"
+            >StegoCraft</span
+          >
+        </a>
+        <button
+          data-collapse-toggle="navbar-default"
+          type="button"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          aria-controls="navbar-default"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="w-5 h-5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 17 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 1h15M1 7h15M1 13h15"
+            />
+          </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+          <ul
+            class="font-medium flex flex-col items-center p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-800 dark:border-gray-700"
+          >
+            <li>
+              <a
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                aria-current="page"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="about.html"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >About</a
+              >
+            </li>
+            <li>
+              <a
+                href="feature.html"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >Features</a
+              >
+            </li>
+            <li>
+              <a
+                href="work.html"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >How It Works</a
+              >
+            </li>
+            <div class="flex items-center ms-3 md:ms-0">
+              <button
+                id="theme-toggle"
+                type="button"
+                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-full text-sm p-2 transition duration-300 ease-in-out"
+              >
+                <!-- Light Icon -->
+                <svg
+                  id="theme-toggle-light-icon"
+                  class="w-6 h-6 hidden transition duration-300 ease-in-out"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm4.95 2.64a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06zM17.25 10a.75.75 0 010 1.5h-1.5a.75.75 0 010-1.5h1.5zm-2.24 5.36a.75.75 0 00-1.06 1.06l1.06 1.06a.75.75 0 001.06-1.06l-1.06-1.06zM10 17.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM5.36 15.24a.75.75 0 00-1.06 1.06l1.06 1.06a.75.75 0 001.06-1.06L5.36 15.24zM2.75 10a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5h-1.5zM4.7 4.7a.75.75 0 10-1.06 1.06L4.7 6.82a.75.75 0 001.06-1.06L4.7 4.7zM10 6a4 4 0 100 8 4 4 0 000-8z"
+                  ></path>
+                </svg>
+
+                <!-- Dark Icon -->
+                <svg
+                  id="theme-toggle-dark-icon"
+                  class="w-6 h-6 hidden transition duration-300 ease-in-out"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.293 13.293A8 8 0 016.707 2.707 8.001 8.001 0 1017.293 13.293z"
+                  ></path>
+                </svg>
+                <span class="sr-only">Toggle Theme</span>
+              </button>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+      <!-- Hero Section -->
+      <div class="text-center mb-12">
+        <h1
+          class="mb-4 p-3 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent"
+        >
+          Advanced Steganography Tool
+        </h1>
+        <p
+          class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400"
+        >
+          Securely hide your sensitive files inside images, audio, or other file
+          formats with our powerful steganography platform.
+        </p>
+      </div>
+
+      <!-- Main app container -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+        <!-- Tabs -->
+        <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+          <ul
+            class="flex flex-wrap -mb-px text-base sm:text-xs lg:text-sm md:text-sm font-medium text-center"
+            id="tabs"
+            role="tablist"
+          >
+            <li class="mr-2" role="presentation">
+              <button
+                class="inline-block p-4 border-b-2 rounded-t-lg"
+                id="hide-tab"
+                type="button"
+                role="tab"
+                aria-controls="hide"
+                aria-selected="false"
+              >
+                Hide Data
+              </button>
+            </li>
+            <li class="mr-2" role="presentation">
+              <button
+                class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                id="extract-tab"
+                type="button"
+                role="tab"
+                aria-controls="extract"
+                aria-selected="false"
+              >
+                Extract Data
+              </button>
+            </li>
+            <li class="mr-2" role="presentation">
+              <button
+                class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                id="text-tab"
+                type="button"
+                role="tab"
+                aria-controls="text"
+                aria-selected="false"
+              >
+                Hide Message
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tab content -->
+        <div id="tab-content">
+          <!-- Hide Data Tab -->
+          <div
+            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+            id="hide"
+            role="tabpanel"
+            aria-labelledby="hide-tab"
+          >
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Cover File Selection -->
+              <div>
+                <h3
+                  class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+                >
+                  Cover File
+                </h3>
+                <div class="custom-dropzone" id="cover-dropzone">
+                  <svg
+                    class="mx-auto h-12 w-12 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
+                  </svg>
+                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Drag and drop or click to select a cover file (image, audio,
+                    video)
+                  </p>
+                  <input
+                    id="cover-file"
+                    type="file"
+                    class="hidden"
+                    accept="image/*,audio/*,video/*"
+                  />
+                </div>
+                <div class="mt-4 hidden" id="cover-preview-container">
+                  <h4
+                    class="text-sm font-medium text-gray-900 dark:text-white mb-2"
+                  >
+                    Preview:
+                  </h4>
+                  <div class="relative">
+                    <img
+                      id="cover-preview"
+                      class="max-h-48 rounded-lg"
+                      src=""
+                      alt="Cover preview"
+                    />
+                    <audio
+                      id="audio-preview"
+                      class="w-full hidden"
+                      controls
+                    ></audio>
+                    <video
+                      id="video-preview"
+                      class="max-h-48 rounded-lg hidden"
+                      controls
+                    ></video>
+                  </div>
+                  <p
+                    id="cover-info"
+                    class="mt-2 text-sm text-gray-500 dark:text-gray-400"
+                  ></p>
+                </div>
+              </div>
+
+              <!-- Secret Data Selection -->
+              <div>
+                <h3
+                  class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+                >
+                  Secret Data
+                </h3>
+                <div class="custom-dropzone" id="secret-dropzone">
+                  <svg
+                    class="mx-auto h-12 w-12 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
+                  </svg>
+                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Drag and drop or click to select a secret file to hide
+                  </p>
+                  <input id="secret-file" type="file" class="hidden" />
+                </div>
+                <div class="mt-4 hidden" id="secret-preview-container">
+                  <h4
+                    class="text-sm font-medium text-gray-900 dark:text-white mb-2"
+                  >
+                    File selected:
+                  </h4>
+                  <p
+                    id="secret-info"
+                    class="text-sm text-gray-500 dark:text-gray-400"
+                  ></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Encryption Options -->
+            <div class="mt-6">
+              <h3
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+              >
+                Security Options
+              </h3>
+              <div class="flex items-center mb-4">
+                <input
+                  id="enable-encryption"
+                  type="checkbox"
+                  value=""
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="enable-encryption"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Encrypt data with password</label
+                >
+              </div>
+              <div id="password-container" class="hidden">
+                <div class="relative mb-4">
+                  <input
+                    type="password"
+                    id="encrypt-password"
+                    class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter encryption password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="toggle-password"
+                    class="absolute inset-y-0 right-0 flex items-center pr-3"
+                  >
+                    <svg
+                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="algorithm-select"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Steganography Algorithm</label
+                >
+                <select
+                  id="algorithm-select"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="lsb" selected>
+                    LSB (Least Significant Bit)
+                  </option>
+                  <option value="dct">DCT (Discrete Cosine Transform)</option>
+                  <option value="dwt">DWT (Discrete Wavelet Transform)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex justify-center mt-6">
+              <button
+                id="hide-data-btn"
+                type="button"
+                class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                <span>Hide Data</span>
+              </button>
+            </div>
+
+            <!-- Result section -->
+            <div id="hide-result" class="mt-8 hidden">
+              <div
+                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert"
+              >
+                <span class="font-medium">Success!</span> Your data has been
+                successfully hidden.
+              </div>
+              <div class="flex justify-center">
+                <a
+                  id="download-stego-file"
+                  href="#"
+                  download="stego-file"
+                  class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+                >
+                  Download Steganographic File
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extract Data Tab -->
+          <div
+            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+            id="extract"
+            role="tabpanel"
+            aria-labelledby="extract-tab"
+          >
+            <div class="mb-6">
+              <h3
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+              >
+                Steganographic File
+              </h3>
+              <div class="custom-dropzone" id="stego-dropzone">
+                <svg
+                  class="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Drag and drop or click to select the steganographic file
+                </p>
+                <input id="stego-file" type="file" class="hidden" accept="*" />
+              </div>
+              <div class="mt-4 hidden" id="stego-preview-container">
+                <p
+                  id="stego-info"
+                  class="mt-2 text-sm text-gray-500 dark:text-gray-400"
+                ></p>
+              </div>
+            </div>
+
+            <!-- Decryption -->
+            <div class="mb-6">
+              <div class="flex items-center mb-4">
+                <input
+                  id="need-decryption"
+                  type="checkbox"
+                  value=""
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="need-decryption"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >File is encrypted</label
+                >
+              </div>
+              <div id="decrypt-password-container" class="hidden">
+                <div class="relative mb-4">
+                  <input
+                    type="password"
+                    id="decrypt-password"
+                    class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter decryption password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="toggle-decrypt-password"
+                    class="absolute inset-y-0 right-0 flex items-center pr-3"
+                  >
+                    <svg
+                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="extract-algorithm-select"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Extraction Algorithm</label
+                >
+                <select
+                  id="extract-algorithm-select"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="lsb" selected>
+                    LSB (Least Significant Bit)
+                  </option>
+                  <option value="dct">DCT (Discrete Cosine Transform)</option>
+                  <option value="dwt">DWT (Discrete Wavelet Transform)</option>
+                  <option value="auto">Auto-detect</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex justify-center">
+              <button
+                id="extract-data-btn"
+                type="button"
+                class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                <span>Extract Data</span>
+              </button>
+            </div>
+
+            <!-- Result section -->
+            <div id="extract-result" class="mt-8 hidden">
+              <div
+                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert"
+              >
+                <span class="font-medium">Success!</span> Hidden data extracted
+                successfully.
+              </div>
+              <div>
+                <div id="extracted-preview-container" class=" mt-4">
+                  <h4
+                    class="text-sm font-medium text-gray-900 dark:text-white mb-2"
+                  >
+                    Extracted File Preview:
+                  </h4>
+                  <div id="extracted-preview"></div>
+                </div>
+                <p
+                  id="extracted-file-info"
+                  class="text-sm text-gray-500 dark:text-gray-400 mb-4"
+                ></p>
+                <div class="flex justify-center">
+                  <a
+                    id="download-extracted-file"
+                    href="#"
+                    download="extracted-file"
+                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+                  >
+                    Download Extracted File
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text Steganography Tab -->
+          <div
+            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+            id="text"
+            role="tabpanel"
+            aria-labelledby="text-tab"
+          >
+            <div class="mb-6">
+              <h3
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+              >
+                Text Steganography
+              </h3>
+              <div class="grid md:grid-cols-2 gap-6">
+                <!-- Text Input -->
+                <div>
+                  <label
+                    for="cover-text"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Cover Text</label
+                  >
+                  <textarea
+                    id="cover-text"
+                    rows="8"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter cover text here..."
+                  ></textarea>
+                </div>
+
+                <!-- Secret message -->
+                <div>
+                  <label
+                    for="secret-text"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Secret Message</label
+                  >
+                  <textarea
+                    id="secret-text"
+                    rows="8"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter secret message here..."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Text Steganography Methods -->
+            <div class="mb-6">
+              <label
+                for="text-stego-method"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Steganography Method</label
+              >
+              <select
+                id="text-stego-method"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="whitespace">Whitespace Encoding</option>
+                <option value="zero-width">Zero-Width Characters</option>
+                <option value="homoglyph">Homoglyph Substitution</option>
+              </select>
+            </div>
+
+            <!-- Text Security Options -->
+            <div class="mb-6">
+              <div class="flex items-center mb-4">
+                <input
+                  id="text-enable-encryption"
+                  type="checkbox"
+                  value=""
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="text-enable-encryption"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Encrypt message with password</label
+                >
+              </div>
+              <div id="text-password-container" class="hidden">
+                <div class="relative mb-4">
+                  <input
+                    type="password"
+                    id="text-password"
+                    class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter encryption password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="toggle-text-password"
+                    class="absolute inset-y-0 right-0 flex items-center pr-3"
+                  >
+                    <svg
+                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex flex-wrap justify-center gap-4">
+              <button
+                id="hide-text-btn"
+                type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                Hide Message
+              </button>
+              <button
+                id="extract-text-btn"
+                type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+                Extract Message
+              </button>
+            </div>
+
+            <!-- Result section -->
+            <div id="text-result" class="mt-8 hidden">
+              <div
+                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert"
+              >
+                <span class="font-medium">Success!</span> Your message has been
+                processed successfully.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <script src="js/script.js"></script> -->
+
+    <!-- Optional: Script to handle tab switching and toggling password visibility -->
+    <script src="js/script.js"></script>
+    <!-- Tambahkan sebelum script.js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document
+        .getElementById("cover-dropzone")
+        .addEventListener("click", () => {
+          document.getElementById("cover-file").click();
+        });
+
+      document
+        .getElementById("secret-dropzone")
+        .addEventListener("click", () => {
+          document.getElementById("secret-file").click();
+        });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // ... (kode JavaScript Anda yang sudah ada) ...
+
+        const themeToggleBtn = document.getElementById("theme-toggle");
+        const themeToggleDarkIcon = document.getElementById(
+          "theme-toggle-light-icon"
+        );
+        const themeToggleLightIcon = document.getElementById(
+          "theme-toggle-dark-icon"
+        );
+
+        // Cek apakah tema sudah disimpan di local storage
+        if (
+          localStorage.getItem("color-theme") === "dark" ||
+          (!("color-theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          themeToggleLightIcon.classList.remove("hidden");
+          document.documentElement.classList.add("dark");
+        } else {
+          themeToggleDarkIcon.classList.remove("hidden");
+        }
+
+        themeToggleBtn.addEventListener("click", () => {
+          // Toggle icon
+          themeToggleDarkIcon.classList.toggle("hidden");
+          themeToggleLightIcon.classList.toggle("hidden");
+
+          // Ubah tema di root element
+          document.documentElement.classList.toggle("dark");
+
+          // Simpan preferensi tema di local storage
+          if (document.documentElement.classList.contains("dark")) {
+            localStorage.setItem("color-theme", "dark");
+          } else {
+            localStorage.setItem("color-theme", "light");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

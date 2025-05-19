@@ -1,0 +1,82 @@
+/* Contoh kustomisasi */
+.container {
+  max-width: 480px; /* max-w-xl sama dengan 768px dalam konfigurasi default Tailwind, tapi seringkali desainer menggunakan nilai yang lebih sempit untuk konten utama. 480px adalah perkiraan yang umum untuk konten terpusat pada layar yang lebih kecil. Anda bisa menyesuaikannya sesuai kebutuhan desain Anda. */
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffffff; /* bg-white */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+  border-radius: 0.5rem; /* rounded-lg, 0.5rem adalah nilai default untuk rounded-lg */
+  padding: 1.5rem; /* p-6, 1.5rem adalah nilai default untuk p-6 (6 * 0.25rem) */
+  margin-top: 2.5rem; /* mt-10, 2.5rem adalah nilai default untuk mt-10 (10 * 0.25rem) */
+}
+
+.file-input-label {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.file-input {
+  display: none;
+}
+
+#output-area {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  white-space: pre-wrap; /* Agar teks panjang tidak keluar dari area */
+}
+
+.gradient-text {
+  background: linear-gradient(
+    to right,
+    #6366f1,
+    #8b5cf6
+  ); /* Contoh warna biru ke ungu */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .gradient-text-dark {
+  background: linear-gradient(
+    to right,
+    #a5b4fc,
+    #d8b4fe
+  ); /* Contoh warna biru ke ungu untuk tema gelap */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.custom-dropzone {
+  border: 2px dashed #4b5563;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.custom-dropzone:hover,
+.custom-dropzone.dragover {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.05);
+}
