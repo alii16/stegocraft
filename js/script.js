@@ -1,852 +1,758 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StegoCraft - Advanced Steganography Tool</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="shortcut icon" href="icon.png" type="image/x-icon" />
-  </head>
-  <body class="bg-gray-50 dark:bg-gray-900 lg:p-8">
-    <!-- Navigation bar -->
-    <nav
-      class="bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700 rounded-lg"
-    >
-      <div
-        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
-      >
-        <a href="#" class="flex items-center">
-          <svg
-            class="w-8 h-8 mr-2 text-blue-600"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <span
-            class="self-center text-2xl font-semibold whitespace-nowrap px-2 bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent"
-            >StegoCraft</span
-          >
-        </a>
-        <button
-          data-collapse-toggle="navbar-default"
-          type="button"
-          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-default"
-          aria-expanded="false"
-        >
-          <span class="sr-only">Open main menu</span>
-          <svg
-            class="w-5 h-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
-          </svg>
-        </button>
-        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul
-            class="font-medium flex flex-col items-center p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-800 dark:border-gray-700"
-          >
-            <li>
-              <a
-                href="#"
-                class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
-                aria-current="page"
-                >Home</a
-              >
-            </li>
-            <li>
-              <a
-                href="about.html"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >About</a
-              >
-            </li>
-            <li>
-              <a
-                href="feature.html"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >Features</a
-              >
-            </li>
-            <li>
-              <a
-                href="work.html"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >How It Works</a
-              >
-            </li>
-            <div class="flex items-center ms-3 md:ms-0">
-              <button
-                id="theme-toggle"
-                type="button"
-                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-full text-sm p-2 transition duration-300 ease-in-out"
-              >
-                <!-- Light Icon -->
-                <svg
-                  id="theme-toggle-light-icon"
-                  class="w-6 h-6 hidden transition duration-300 ease-in-out"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm4.95 2.64a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06zM17.25 10a.75.75 0 010 1.5h-1.5a.75.75 0 010-1.5h1.5zm-2.24 5.36a.75.75 0 00-1.06 1.06l1.06 1.06a.75.75 0 001.06-1.06l-1.06-1.06zM10 17.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM5.36 15.24a.75.75 0 00-1.06 1.06l1.06 1.06a.75.75 0 001.06-1.06L5.36 15.24zM2.75 10a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5h-1.5zM4.7 4.7a.75.75 0 10-1.06 1.06L4.7 6.82a.75.75 0 001.06-1.06L4.7 4.7zM10 6a4 4 0 100 8 4 4 0 000-8z"
-                  ></path>
-                </svg>
+document.getElementById("stego-dropzone").addEventListener("click", () => {
+  document.getElementById("stego-file").click();
+});
+document.getElementById("stego-file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  const infoEl = document.getElementById("stego-info");
+  if (file) {
+    infoEl.textContent = `Selected file: ${file.name}`;
+    // Jika preview container disembunyikan, tampilkan
+    document
+      .getElementById("stego-preview-container")
+      .classList.remove("hidden");
+  } else {
+    infoEl.textContent = "";
+    document.getElementById("stego-preview-container").classList.add("hidden");
+  }
+});
+// Simple tab switching
+const tabs = document.querySelectorAll("#tabs button");
+const tabContents = document.querySelectorAll("#tab-content > div");
 
-                <!-- Dark Icon -->
-                <svg
-                  id="theme-toggle-dark-icon"
-                  class="w-6 h-6 hidden transition duration-300 ease-in-out"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M17.293 13.293A8 8 0 016.707 2.707 8.001 8.001 0 1017.293 13.293z"
-                  ></path>
-                </svg>
-                <span class="sr-only">Toggle Theme</span>
-              </button>
-            </div>
-          </ul>
-        </div>
-      </div>
-    </nav>
+tabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    // Remove active classes
+    tabs.forEach((btn) =>
+      btn.classList.remove("border-blue-700", "text-blue-700")
+    );
+    tabContents.forEach((content) => content.classList.add("hidden"));
+    // Activate clicked tab
+    tab.classList.add("border-blue-700", "text-blue-700");
+    const tabContent = document.getElementById(
+      tab.getAttribute("aria-controls")
+    );
+    if (tabContent) {
+      tabContent.classList.remove("hidden");
+    }
+  });
+});
 
-    <!-- Main content -->
-    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-      <!-- Hero Section -->
-      <div class="text-center mb-12">
-        <h1
-          class="mb-4 p-3 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent"
-        >
-          Advanced Steganography Tool
-        </h1>
-        <p
-          class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400"
-        >
-          Securely hide your sensitive files inside images, audio, or other file
-          formats with our powerful steganography platform.
-        </p>
-      </div>
+// Preview Cover File
+document
+  .getElementById("cover-file")
+  .addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-      <!-- Main app container -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-        <!-- Tabs -->
-        <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-          <ul
-            class="flex flex-wrap -mb-px text-base sm:text-xs lg:text-sm md:text-sm font-medium text-center"
-            id="tabs"
-            role="tablist"
-          >
-            <li class="mr-2" role="presentation">
-              <button
-                class="inline-block p-4 border-b-2 rounded-t-lg"
-                id="hide-tab"
-                type="button"
-                role="tab"
-                aria-controls="hide"
-                aria-selected="false"
-              >
-                Hide Data
-              </button>
-            </li>
-            <li class="mr-2" role="presentation">
-              <button
-                class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                id="extract-tab"
-                type="button"
-                role="tab"
-                aria-controls="extract"
-                aria-selected="false"
-              >
-                Extract Data
-              </button>
-            </li>
-            <li class="mr-2" role="presentation">
-              <button
-                class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                id="text-tab"
-                type="button"
-                role="tab"
-                aria-controls="text"
-                aria-selected="false"
-              >
-                Hide Message
-              </button>
-            </li>
-          </ul>
-        </div>
+    const previewContainer = document.getElementById("cover-preview-container");
+    const imageElem = document.getElementById("cover-preview");
+    const audioElem = document.getElementById("audio-preview");
+    const videoElem = document.getElementById("video-preview");
 
-        <!-- Tab content -->
-        <div id="tab-content">
-          <!-- Hide Data Tab -->
-          <div
-            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
-            id="hide"
-            role="tabpanel"
-            aria-labelledby="hide-tab"
-          >
-            <div class="grid md:grid-cols-2 gap-6">
-              <!-- Cover File Selection -->
-              <div>
-                <h3
-                  class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                >
-                  Cover File
-                </h3>
-                <div class="custom-dropzone" id="cover-dropzone">
-                  <svg
-                    class="mx-auto h-12 w-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    />
-                  </svg>
-                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Drag and drop or click to select a cover file (image, audio,
-                    video)
-                  </p>
-                  <input
-                    id="cover-file"
-                    type="file"
-                    class="hidden"
-                    accept="image/*,audio/*,video/*"
-                  />
-                </div>
-                <div class="mt-4 hidden" id="cover-preview-container">
-                  <h4
-                    class="text-sm font-medium text-gray-900 dark:text-white mb-2"
-                  >
-                    Preview:
-                  </h4>
-                  <div class="relative">
-                    <img
-                      id="cover-preview"
-                      class="max-h-48 rounded-lg"
-                      src=""
-                      alt="Cover preview"
-                    />
-                    <audio
-                      id="audio-preview"
-                      class="w-full hidden"
-                      controls
-                    ></audio>
-                    <video
-                      id="video-preview"
-                      class="max-h-48 rounded-lg hidden"
-                      controls
-                    ></video>
-                  </div>
-                  <p
-                    id="cover-info"
-                    class="mt-2 text-sm text-gray-500 dark:text-gray-400"
-                  ></p>
-                </div>
-              </div>
+    // Hide all previews
+    imageElem.classList.add("hidden");
+    audioElem.classList.add("hidden");
+    videoElem.classList.add("hidden");
 
-              <!-- Secret Data Selection -->
-              <div>
-                <h3
-                  class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                >
-                  Secret Data
-                </h3>
-                <div class="custom-dropzone" id="secret-dropzone">
-                  <svg
-                    class="mx-auto h-12 w-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    />
-                  </svg>
-                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Drag and drop or click to select a secret file to hide
-                  </p>
-                  <input id="secret-file" type="file" class="hidden" />
-                </div>
-                <div class="mt-4 hidden" id="secret-preview-container">
-                  <h4
-                    class="text-sm font-medium text-gray-900 dark:text-white mb-2"
-                  >
-                    File selected:
-                  </h4>
-                  <p
-                    id="secret-info"
-                    class="text-sm text-gray-500 dark:text-gray-400"
-                  ></p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Encryption Options -->
-            <div class="mt-6">
-              <h3
-                class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-              >
-                Security Options
-              </h3>
-              <div class="flex items-center mb-4">
-                <input
-                  id="enable-encryption"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  for="enable-encryption"
-                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Encrypt data with password</label
-                >
-              </div>
-              <div id="password-container" class="hidden">
-                <div class="relative mb-4">
-                  <input
-                    type="password"
-                    id="encrypt-password"
-                    class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter encryption password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    id="toggle-password"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3"
-                  >
-                    <svg
-                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      ></path>
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="mb-4">
-                <label
-                  for="algorithm-select"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Steganography Algorithm</label
-                >
-                <select
-                  id="algorithm-select"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option value="lsb" selected>
-                    LSB (Least Significant Bit)
-                  </option>
-                  <option value="dct">DCT (Discrete Cosine Transform)</option>
-                  <option value="dwt">DWT (Discrete Wavelet Transform)</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="flex justify-center mt-6">
-              <button
-                id="hide-data-btn"
-                type="button"
-                class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                <span>Hide Data</span>
-              </button>
-            </div>
-
-            <!-- Result section -->
-            <div id="hide-result" class="mt-8 hidden">
-              <div
-                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                role="alert"
-              >
-                <span class="font-medium">Success!</span> Your data has been
-                successfully hidden.
-              </div>
-              <div class="flex justify-center">
-                <a
-                  id="download-stego-file"
-                  href="#"
-                  download="stego-file"
-                  class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
-                >
-                  Download Steganographic File
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Extract Data Tab -->
-          <div
-            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
-            id="extract"
-            role="tabpanel"
-            aria-labelledby="extract-tab"
-          >
-            <div class="mb-6">
-              <h3
-                class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-              >
-                Steganographic File
-              </h3>
-              <div class="custom-dropzone" id="stego-dropzone">
-                <svg
-                  class="mx-auto h-12 w-12 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  />
-                </svg>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Drag and drop or click to select the steganographic file
-                </p>
-                <input id="stego-file" type="file" class="hidden" accept="*" />
-              </div>
-              <div class="mt-4 hidden" id="stego-preview-container">
-                <p
-                  id="stego-info"
-                  class="mt-2 text-sm text-gray-500 dark:text-gray-400"
-                ></p>
-              </div>
-            </div>
-
-            <!-- Decryption -->
-            <div class="mb-6">
-              <div class="flex items-center mb-4">
-                <input
-                  id="need-decryption"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  for="need-decryption"
-                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >File is encrypted</label
-                >
-              </div>
-              <div id="decrypt-password-container" class="hidden">
-                <div class="relative mb-4">
-                  <input
-                    type="password"
-                    id="decrypt-password"
-                    class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter decryption password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    id="toggle-decrypt-password"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3"
-                  >
-                    <svg
-                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      ></path>
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="mb-4">
-                <label
-                  for="extract-algorithm-select"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Extraction Algorithm</label
-                >
-                <select
-                  id="extract-algorithm-select"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option value="lsb" selected>
-                    LSB (Least Significant Bit)
-                  </option>
-                  <option value="dct">DCT (Discrete Cosine Transform)</option>
-                  <option value="dwt">DWT (Discrete Wavelet Transform)</option>
-                  <option value="auto">Auto-detect</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="flex justify-center">
-              <button
-                id="extract-data-btn"
-                type="button"
-                class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                <span>Extract Data</span>
-              </button>
-            </div>
-
-            <!-- Result section -->
-            <div id="extract-result" class="mt-8 hidden">
-              <div
-                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                role="alert"
-              >
-                <span class="font-medium">Success!</span> Hidden data extracted
-                successfully.
-              </div>
-              <div>
-                <div id="extracted-preview-container" class="mt-4">
-                  <h4
-                    class="text-sm font-medium text-gray-900 dark:text-white mb-2"
-                  >
-                    Extracted File Preview:
-                  </h4>
-                  <div id="extracted-preview"></div>
-                </div>
-                <p
-                  id="extracted-file-info"
-                  class="text-sm text-gray-500 dark:text-gray-400 mb-4"
-                ></p>
-                <div class="flex justify-center">
-                  <a
-                    id="download-extracted-file"
-                    href="#"
-                    download="extracted-file"
-                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
-                  >
-                    Download Extracted File
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Text Steganography Tab -->
-          <div
-            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
-            id="text"
-            role="tabpanel"
-            aria-labelledby="text-tab"
-          >
-            <div class="mb-6">
-              <h3
-                class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-              >
-                Text Steganography
-              </h3>
-              <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label
-                    for="cover-text"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Cover Text</label
-                  >
-                  <div class="relative">
-                    <textarea
-                      id="cover-text"
-                      rows="8"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 pr-10"
-                      placeholder="Enter cover text here..."
-                    ></textarea>
-                    <button
-                      type="button"
-                      class="absolute top-2.5 right-2.5 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-500 focus:outline-none"
-                      onclick="copyToClipboard('cover-text')"
-                    >
-                      <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-2 5h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2z"
-                        ></path>
-                      </svg>
-                      <span class="sr-only">Copy to clipboard</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    for="secret-text"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Secret Message</label
-                  >
-                  <div class="relative">
-                    <textarea
-                      id="secret-text"
-                      rows="8"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 pr-10"
-                      placeholder="Enter secret message here..."
-                    ></textarea>
-                    <button
-                      type="button"
-                      class="absolute top-2.5 right-2.5 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-500 focus:outline-none"
-                      onclick="copyToClipboard('secret-text')"
-                    >
-                      <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-2 5h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2z"
-                        ></path>
-                      </svg>
-                      <span class="sr-only">Copy to clipboard</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Text Steganography Methods -->
-            <div class="mb-6">
-              <label
-                for="text-stego-method"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Steganography Method</label
-              >
-              <select
-                id="text-stego-method"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="whitespace">Whitespace Encoding</option>
-                <option value="zero-width">Zero-Width Characters</option>
-                <option value="homoglyph">Homoglyph Substitution</option>
-              </select>
-            </div>
-
-            <!-- Text Security Options -->
-            <div class="mb-6">
-              <div class="flex items-center mb-4">
-                <input
-                  id="text-enable-encryption"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  for="text-enable-encryption"
-                  class="ml-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Encrypt message with password</label
-                >
-              </div>
-              <div id="text-password-container" class="hidden">
-                <div class="relative mb-4">
-                  <input
-                    type="password"
-                    id="text-password"
-                    class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter encryption password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    id="toggle-text-password"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3"
-                  >
-                    <svg
-                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      ></path>
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="flex flex-wrap justify-center gap-4">
-              <button
-                id="hide-text-btn"
-                type="button"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                Hide Message
-              </button>
-              <button
-                id="extract-text-btn"
-                type="button"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                Extract Message
-              </button>
-            </div>
-
-            <!-- Result section -->
-            <div id="text-result" class="mt-8 hidden">
-              <div
-                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                role="alert"
-              >
-                <span class="font-medium">Success!</span> Your message has been
-                processed successfully.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- <script src="js/script.js"></script> -->
-
-    <!-- Optional: Script to handle tab switching and toggling password visibility -->
-    <script src="js/script.js"></script>
-    <!-- Tambahkan sebelum script.js -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-      document
-        .getElementById("cover-dropzone")
-        .addEventListener("click", () => {
-          document.getElementById("cover-file").click();
-        });
-
-      document
-        .getElementById("secret-dropzone")
-        .addEventListener("click", () => {
-          document.getElementById("secret-file").click();
-        });
-
-      document.addEventListener("DOMContentLoaded", () => {
-        // ... (kode JavaScript Anda yang sudah ada) ...
-
-        const themeToggleBtn = document.getElementById("theme-toggle");
-        const themeToggleDarkIcon = document.getElementById(
-          "theme-toggle-light-icon"
-        );
-        const themeToggleLightIcon = document.getElementById(
-          "theme-toggle-dark-icon"
-        );
-
-        // Cek apakah tema sudah disimpan di local storage
-        if (
-          localStorage.getItem("color-theme") === "dark" ||
-          (!("color-theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
-          themeToggleLightIcon.classList.remove("hidden");
-          document.documentElement.classList.add("dark");
-        } else {
-          themeToggleDarkIcon.classList.remove("hidden");
-        }
-
-        themeToggleBtn.addEventListener("click", () => {
-          // Toggle icon
-          themeToggleDarkIcon.classList.toggle("hidden");
-          themeToggleLightIcon.classList.toggle("hidden");
-
-          // Ubah tema di root element
-          document.documentElement.classList.toggle("dark");
-
-          // Simpan preferensi tema di local storage
-          if (document.documentElement.classList.contains("dark")) {
-            localStorage.setItem("color-theme", "dark");
-          } else {
-            localStorage.setItem("color-theme", "light");
-          }
-        });
-      });
-      
-      function copyToClipboard(id) {
-        const textarea = document.getElementById(id);
-        textarea.select();
-        document.execCommand("copy");
-        // Optionally provide some visual feedback
-        const button = textarea.nextElementSibling;
-        button.innerHTML =
-          '<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span class="sr-only">Copied!</span>';
-        setTimeout(() => {
-          button.innerHTML =
-            '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-2 5h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2z"></path></svg><span class="sr-only">Copy to clipboard</span>';
-        }, 1500);
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const result = e.target.result;
+      if (file.type.startsWith("image/")) {
+        imageElem.src = result;
+        imageElem.classList.remove("hidden");
+      } else if (file.type.startsWith("audio/")) {
+        audioElem.src = result;
+        audioElem.classList.remove("hidden");
+      } else if (file.type.startsWith("video/")) {
+        videoElem.src = result;
+        videoElem.classList.remove("hidden");
       }
-    </script>
-  </body>
-</html>
+      previewContainer.classList.remove("hidden");
+    };
+    reader.readAsDataURL(file);
+  });
+
+// Preview Secret File
+document
+  .getElementById("secret-file")
+  .addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const previewContainer = document.getElementById(
+      "secret-preview-container"
+    );
+    // Clear any previous preview content
+    previewContainer.innerHTML = "";
+
+    // Create preview element based on file type
+    let previewElem;
+    if (file.type.startsWith("image/")) {
+      previewElem = document.createElement("img");
+      previewElem.className = "max-h-48 rounded-lg";
+    } else if (file.type.startsWith("audio/")) {
+      previewElem = document.createElement("audio");
+      previewElem.controls = true;
+      previewElem.className = "w-full";
+    } else if (file.type.startsWith("video/")) {
+      previewElem = document.createElement("video");
+      previewElem.controls = true;
+      previewElem.className = "max-h-48 rounded-lg";
+    } else {
+      // If file type is not previewable, show file name
+      previewContainer.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400">Selected: ${file.name}</p>`;
+      previewContainer.classList.remove("hidden");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      previewElem.src = e.target.result;
+      previewContainer.appendChild(previewElem);
+      previewContainer.classList.remove("hidden");
+    };
+    reader.readAsDataURL(file);
+  });
+
+// Utility function: simple XOR encryption/decryption
+function xorEncryptDecrypt(input, password) {
+  let output = "";
+  for (let i = 0; i < input.length; i++) {
+    output += String.fromCharCode(
+      input.charCodeAt(i) ^ password.charCodeAt(i % password.length)
+    );
+  }
+  return output;
+}
+
+// --- FILE STEGANOGRAPHY ---
+
+// Hide (embed) secret file into cover file
+const coverFileInput = document.getElementById("cover-file");
+const secretFileInput = document.getElementById("secret-file");
+const hideDataBtn = document.getElementById("hide-data-btn");
+const hideResult = document.getElementById("hide-result");
+const downloadStegoLink = document.getElementById("download-stego-file");
+const algorithmSelect = document.getElementById("algorithm-select");
+const enableEncryption = document.getElementById("enable-encryption");
+const passwordContainer = document.getElementById("password-container");
+const encryptPassword = document.getElementById("encrypt-password");
+
+enableEncryption.addEventListener("change", () => {
+  passwordContainer.classList.toggle("hidden", !enableEncryption.checked);
+});
+
+hideDataBtn.addEventListener("click", () => {
+  if (coverFileInput.files.length === 0 || secretFileInput.files.length === 0) {
+    Swal.fire({
+      title: "Info!",
+      text: "Please select both cover file and secret file.",
+      icon: "info",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+      },
+    });
+    return;
+  }
+  const coverFile = coverFileInput.files[0];
+  const secretFile = secretFileInput.files[0];
+  const selectedAlgorithm = algorithmSelect.value;
+  const useEncryption = enableEncryption.checked;
+  const password = encryptPassword.value || "";
+
+  // Read both files as data URLs
+  const coverReader = new FileReader();
+  const secretReader = new FileReader();
+  let coverDataURL = "";
+  let secretDataURL = "";
+  let errorOccurred = false; // Flag untuk menandai jika terjadi error
+
+  Swal.fire({
+    title: "Processing...",
+    text: "Please wait while we process your files this can take seconds.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  coverReader.onload = function (e) {
+    coverDataURL = e.target.result;
+    if (secretDataURL !== "") {
+      processStego();
+    }
+  };
+
+  secretReader.onload = function (e) {
+    secretDataURL = e.target.result;
+    if (coverDataURL !== "") {
+      processStego();
+    }
+  };
+
+  coverReader.onerror = function (error) {
+    errorOccurred = true;
+    Swal.close();
+    Swal.fire({
+      title: "Error!",
+      text: "Failed to read cover file: " + error,
+      icon: "error",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+      },
+    });
+    console.error("Failed to read cover file:", error);
+  };
+
+  secretReader.onerror = function (error) {
+    errorOccurred = true;
+    Swal.close();
+    Swal.fire({
+      title: "Error!",
+      text: "Failed to read secret file: " + error,
+      icon: "error",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+      },
+    });
+    console.error("Failed to read secret file:", error);
+  };
+
+  coverReader.readAsDataURL(coverFile);
+  secretReader.readAsDataURL(secretFile);
+
+  // Pada proses enkripsi file (hideDataBtn)
+  function processStego() {
+    if (errorOccurred) {
+      return; // Hentikan proses jika sudah terjadi error
+    }
+    if (useEncryption && password) {
+      // Tambahkan marker "STEGFILE:" ke data asli agar bisa divalidasi saat dekripsi
+      secretDataURL = "STEGFILE:" + secretDataURL;
+      const encrypted = btoa(xorEncryptDecrypt(secretDataURL, password));
+      secretDataURL = encrypted;
+    }
+    const stegoData = {
+      cover: coverDataURL,
+      secret: secretDataURL,
+      algorithm: selectedAlgorithm,
+      encrypted: useEncryption,
+    };
+
+    const stegoText = JSON.stringify(stegoData);
+    const blob = new Blob([stegoText], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    downloadStegoLink.href = url;
+    downloadStegoLink.style.display = "inline-block";
+    hideResult.classList.remove("hidden");
+    Swal.close(); // Tutup loading setelah proses berhasil
+  }
+});
+// Extract secret file from stego file
+const stegoFileInput = document.getElementById("stego-file");
+const extractDataBtn = document.getElementById("extract-data-btn");
+const extractResult = document.getElementById("extract-result");
+const extractedFileInfo = document.getElementById("extracted-file-info");
+const downloadExtractedLink = document.getElementById(
+  "download-extracted-file"
+);
+const needDecryption = document.getElementById("need-decryption");
+const decryptPasswordContainer = document.getElementById(
+  "decrypt-password-container"
+);
+const decryptPassword = document.getElementById("decrypt-password");
+
+needDecryption.addEventListener("change", () => {
+  decryptPasswordContainer.classList.toggle("hidden", !needDecryption.checked);
+});
+
+// Extract secret file from stego file
+// Extract secret file from stego file
+// Extract secret file from stego file
+extractDataBtn.addEventListener("click", () => {
+  console.log("Tombol Ekstraksi Ditekan");
+  if (stegoFileInput.files.length === 0) {
+    Swal.fire({
+      title: "Info!",
+      text: "Please select a steganographic file.",
+      icon: "info",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+      },
+    });
+    return;
+  }
+  const stegoFile = stegoFileInput.files[0];
+  const reader = new FileReader();
+  Swal.fire({
+    title: "Extracting...",
+    text: "Please wait while we extract the secret file this can take a while.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  reader.onload = function (e) {
+    try {
+      console.log("FileReader Onload Dipanggil");
+      const stegoData = JSON.parse(e.target.result);
+      console.log("Data Stego yang Diurai:", stegoData);
+      let secretData = stegoData.secret;
+      console.log("Data Rahasia Awal:", secretData);
+      if (stegoData.encrypted) {
+        const pwd = decryptPassword.value || "";
+        console.log("Password Dekripsi:", pwd);
+        // Lakukan dekripsi dengan XOR (setelah decode base64)
+        secretData = xorEncryptDecrypt(atob(secretData), pwd);
+        console.log("Data Rahasia Setelah Dekripsi:", secretData);
+        // Validasi marker "STEGFILE:" untuk memastikan password benar
+        const marker = "STEGFILE:";
+        if (!secretData.startsWith(marker)) {
+          Swal.close();
+          Swal.fire({
+            title: "Error!",
+            text: "Incorrect password for file decryption. Extraction failed.",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+              confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+            },
+          });
+          return;
+        }
+        // Hapus marker agar mendapatkan Data URL asli
+        secretData = secretData.slice(marker.length);
+        console.log("Data Rahasia Setelah Hapus Marker:", secretData);
+      }
+
+      // Convert the secret data (a Data URL) back into a Blob for download.
+      const parts = secretData.split(",");
+      console.log("Bagian-bagian Data URL:", parts);
+      const mimeMatch = parts[0].match(/:(.*?);/);
+      const mimeType = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+      console.log("MIME Type Terdeteksi:", mimeType);
+      const byteString = atob(parts[1] || "");
+      const ab = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) {
+        ab[i] = byteString.charCodeAt(i);
+      }
+      const extractedBlob = new Blob([ab], { type: mimeType });
+      const extractedUrl = URL.createObjectURL(extractedBlob);
+      // Set download link
+      downloadExtractedLink.href = extractedUrl;
+      extractedFileInfo.textContent =
+        "Secret file embedded in stego file extracted successfully.";
+
+      // Tampilkan preview file
+      const extractedPreviewContainer = document.getElementById(
+        "extracted-preview-container"
+      );
+      const extractedPreview = document.getElementById("extracted-preview");
+
+      // Bersihkan preview sebelumnya
+      extractedPreview.innerHTML = "";
+
+      if (mimeType.startsWith("image/")) {
+        const img = document.createElement("img");
+        img.src = secretData;
+        img.className = "max-h-48 rounded-lg";
+        extractedPreview.appendChild(img);
+      } else if (mimeType.startsWith("audio/")) {
+        const audio = document.createElement("audio");
+        audio.src = secretData;
+        audio.controls = true;
+        audio.className = "w-full";
+        extractedPreview.appendChild(audio);
+      } else if (mimeType.startsWith("video/")) {
+        const video = document.createElement("video");
+        video.src = secretData;
+        video.controls = true;
+        video.className = "max-h-48 rounded-lg";
+        extractedPreview.appendChild(video);
+      } else if (mimeType === "application/pdf") {
+        const img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png"; // ikon PDF
+        img.alt = "PDF File";
+        img.className = "h-16 mx-auto";
+        extractedPreview.appendChild(img);
+      } else if (
+        mimeType === "application/msword" ||
+        mimeType ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ) {
+        const img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/512/337/337932.png"; // ikon Word
+        img.alt = "Word File";
+        img.className = "h-16 mx-auto";
+        extractedPreview.appendChild(img);
+      } else if (
+        mimeType === "application/vnd.ms-excel" ||
+        mimeType ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ) {
+        const img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/512/732/732011.png"; // ikon Excel
+        img.alt = "Excel File";
+        img.className = "h-16 mx-auto";
+        extractedPreview.appendChild(img);
+      } else {
+        extractedPreview.innerHTML = `
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            No preview available for this file type.
+          </p>`;
+      }
+
+      // Tampilkan container preview dengan mengubah style.display
+      Swal.close(); // setelah proses berhasil
+      extractedPreviewContainer.style.display = "block";
+      extractResult.style.display = "block";
+    } catch (err) {
+      Swal.close();
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to extract data: " + err,
+        icon: "error",
+        confirmButtonText: "OK",
+        customClass: {
+          confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+        },
+      });
+      console.error("Terjadi Kesalahan Saat Ekstraksi:", err);
+    }
+  };
+  reader.readAsText(stegoFile);
+});
+// --- TEXT STEGANOGRAPHY ---
+
+const coverTextElem = document.getElementById("cover-text");
+const secretTextElem = document.getElementById("secret-text");
+const textStegoMethodSelect = document.getElementById("text-stego-method");
+const hideTextBtn = document.getElementById("hide-text-btn");
+const extractTextBtn = document.getElementById("extract-text-btn");
+const textResult = document.getElementById("text-result");
+
+// --- TEXT STEGANOGRAPHY FUNCTIONS ---
+
+// Delimiter untuk memisahkan cover text dan pesan tersembunyi
+const TEXT_DELIMITER = "\n|||SECRET|||";
+const WHITESPACE_END_MARKER = "#"; // Penanda khusus untuk whitespace
+
+// Fungsi konversi string ke binary (8-bit per karakter)
+function stringToBinary(str) {
+    let binary = "";
+    for (let i = 0; i < str.length; i++) {
+        binary += str.charCodeAt(i).toString(2).padStart(8, "0");
+    }
+    return binary;
+}
+
+// Fungsi untuk enkoding dengan metode Whitespace
+function encodeWhitespace(message) {
+    const binary = stringToBinary(message);
+    // Map '0' ke spasi dan '1' ke tab
+    let encoded = "";
+    for (const bit of binary) {
+        encoded += bit === "0" ? " " : "\t";
+    }
+    return encoded;
+}
+
+function decodeWhitespace(encoded) {
+    let binary = "";
+    for (const ch of encoded) {
+        if (ch === " ") binary += "0";
+        else if (ch === "\t") binary += "1";
+    }
+    let message = "";
+    for (let i = 0; i < binary.length; i += 8) {
+        let byte = binary.slice(i, i + 8);
+        message += String.fromCharCode(parseInt(byte, 2));
+    }
+    return message;
+}
+
+// Untuk metode Zero-Width, gunakan U+200B sebagai 0 dan U+200C sebagai 1
+const ZW0 = "\u200B";
+const ZW1 = "\u200C";
+function encodeZeroWidth(message) {
+    const binary = stringToBinary(message);
+    let encoded = "";
+    for (const bit of binary) {
+        encoded += bit === "0" ? ZW0 : ZW1;
+    }
+    return encoded;
+}
+function decodeZeroWidth(encoded) {
+    let binary = "";
+    for (const ch of encoded) {
+        if (ch === ZW0) binary += "0";
+        else if (ch === ZW1) binary += "1";
+    }
+    let message = "";
+    for (let i = 0; i < binary.length; i += 8) {
+        let byte = binary.slice(i, i + 8);
+        message += String.fromCharCode(parseInt(byte, 2));
+    }
+    return message;
+}
+
+// Untuk Homoglyph Substitution (contoh sederhana gunakan base64)
+function encodeHomoglyph(message) {
+    return btoa(message);
+}
+function decodeHomoglyph(encoded) {
+    return atob(encoded);
+}
+
+// Hide Message
+hideTextBtn.addEventListener("click", () => {
+    const coverText = coverTextElem.value;
+    let secretMessage = secretTextElem.value;
+    if (!coverText || !secretMessage) {
+        Swal.fire({
+            title: "Info!",
+            text: "Please enter both cover text and secret message.",
+            icon: "info",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+            },
+        });
+        return;
+    }
+    let encryptionPrefix = "";
+    // Jika enkripsi diaktifkan, tambahkan marker "STEG:" ke pesan
+    if (document.getElementById("text-enable-encryption").checked) {
+        const pwd = document.getElementById("text-password").value;
+        if (!pwd) {
+            Swal.fire({
+                title: "Info!",
+                text: "Please enter encryption password for text message.",
+                icon: "info",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        // Tambahkan marker "STEG:" sehingga setelah decrypt kita bisa validasi password
+        secretMessage = "STEG:" + secretMessage;
+        // Enkripsi pesan menggunakan XOR kemudian base64 encode
+        secretMessage = btoa(xorEncryptDecrypt(secretMessage, pwd));
+        encryptionPrefix = "ENC:";
+    }
+    const method = textStegoMethodSelect.value; // "whitespace", "zero-width", atau "homoglyph"
+    let encodedSecret = "";
+    if (method === "whitespace") {
+        encodedSecret =
+            encryptionPrefix + "WSPACE:" + encodeWhitespace(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret + WHITESPACE_END_MARKER; // Tambahkan "#"
+    } else if (method === "zero-width") {
+        encodedSecret =
+            encryptionPrefix + "ZWIDTH:" + encodeZeroWidth(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret;
+    } else if (method === "homoglyph") {
+        encodedSecret = encryptionPrefix + "HG:" + encodeHomoglyph(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret;
+    } else {
+        // fallback: gunakan base64
+        encodedSecret = encryptionPrefix + "HG:" + encodeHomoglyph(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret;
+    }
+    textResult.classList.remove("hidden");
+    textResult.innerHTML = `<div class='p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400' role='alert'>
+            <span class='font-medium'>Success!</span> Secret message has been hidden. You can now copy the modified cover text.
+            </div>`;
+});
+
+// Extract Message
+extractTextBtn.addEventListener("click", () => {
+    const coverText = coverTextElem.value;
+    if (!coverText.includes(TEXT_DELIMITER)) {
+        Swal.fire({
+            title: "Info!",
+            text: "No hidden secret message found in the cover text.",
+            icon: "info",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+            },
+        });
+        return;
+    }
+    const parts = coverText.split(TEXT_DELIMITER);
+    let encodedPart = parts[1] || "";
+
+    // Pastikan metode dekripsi yang dipilih sama dengan metode yang digunakan saat enkripsi
+    const selectedMethod = textStegoMethodSelect.value; // "whitespace", "zero-width", "homoglyph"
+    let decodedMessage = "";
+    let isEncrypted = false;
+    let payload = "";
+
+    if (selectedMethod === "whitespace") {
+        if (encodedPart.endsWith(WHITESPACE_END_MARKER)) {
+            encodedPart = encodedPart.slice(0, -WHITESPACE_END_MARKER.length); // Hapus "#"
+        }
+        if (encodedPart.startsWith("ENC:WSPACE:")) {
+            isEncrypted = true;
+            payload = encodedPart.slice("ENC:WSPACE:".length);
+        } else if (encodedPart.startsWith("WSPACE:")) {
+            payload = encodedPart.slice("WSPACE:".length);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Expected whitespace-encoded message.",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        decodedMessage = decodeWhitespace(payload);
+    } else if (selectedMethod === "zero-width") {
+        if (encodedPart.startsWith("ENC:ZWIDTH:")) {
+            isEncrypted = true;
+            payload = encodedPart.slice("ENC:ZWIDTH:".length);
+        } else if (encodedPart.startsWith("ZWIDTH:")) {
+            payload = encodedPart.slice("ZWIDTH:".length);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Expected zero-width encoded message.",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        decodedMessage = decodeZeroWidth(payload);
+    } else if (selectedMethod === "homoglyph") {
+        if (encodedPart.startsWith("ENC:HG:")) {
+            isEncrypted = true;
+            payload = encodedPart.slice("ENC:HG:".length);
+        } else if (encodedPart.startsWith("HG:")) {
+            payload = encodedPart.slice("HG:".length);
+        } else {
+            try {
+                decodedMessage = atob(encodedPart);
+            } catch (err) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to extract secret message: " + err,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    customClass: {
+                        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                    },
+                });
+                return;
+            }
+        }
+        decodedMessage = decodeHomoglyph(payload);
+    } else {
+        Swal.fire({
+            title: "Error!",
+            text: "Unknown text steganography method.",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+            },
+        });
+        return;
+    }
+
+    // Jika pesan sebelumnya terenkripsi, lakukan dekripsi
+    if (isEncrypted) {
+        const pwd = document.getElementById("text-password").value;
+        if (!pwd) {
+            Swal.fire({
+                title: "Info!",
+                text: "Encryption password required to decrypt message.",
+                icon: "info",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        try {
+            decodedMessage = xorEncryptDecrypt(atob(decodedMessage), pwd);
+        } catch (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to decrypt message: " + err,
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        // Validasi marker pesan (misal "STEG:")
+        const marker = "STEG:";
+        if (!decodedMessage.startsWith(marker)) {
+            Swal.fire({
+                title: "Error!",
+                text: "Incorrect password. Unable to decrypt secret message.",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        // Hapus marker sebelum menampilkan pesan
+        decodedMessage = decodedMessage.slice(marker.length);
+    }
+    secretTextElem.value = decodedMessage;
+    textResult.classList.remove("hidden");
+    textResult.innerHTML = `<div class='p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400' role='alert'>
+                    <span class='font-medium'>Success!</span> Secret message extracted and populated in the secret message field.
+                </div>`;
+});
+// Toggle password visibility handlers (existing)
+document.getElementById("toggle-password")?.addEventListener("click", () => {
+  const passwordInput = document.getElementById("encrypt-password");
+  passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+});
+
+document
+  .getElementById("toggle-decrypt-password")
+  ?.addEventListener("click", () => {
+    const passwordInput = document.getElementById("decrypt-password");
+    passwordInput.type =
+      passwordInput.type === "password" ? "text" : "password";
+  });
+
+document
+  .getElementById("toggle-text-password")
+  ?.addEventListener("click", () => {
+    const passwordInput = document.getElementById("text-password");
+    passwordInput.type =
+      passwordInput.type === "password" ? "text" : "password";
+  });
+
+// Tampilkan atau sembunyikan input password untuk text steganography
+document
+  .getElementById("text-enable-encryption")
+  .addEventListener("change", (event) => {
+    document
+      .getElementById("text-password-container")
+      .classList.toggle("hidden", !event.target.checked);
+  });
