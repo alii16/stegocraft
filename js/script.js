@@ -37,6 +37,7 @@ tabs.forEach((tab) => {
   });
 });
 
+
 // Preview Cover File
 document
   .getElementById("cover-file")
@@ -270,8 +271,6 @@ needDecryption.addEventListener("change", () => {
   decryptPasswordContainer.classList.toggle("hidden", !needDecryption.checked);
 });
 
-// Extract secret file from stego file
-// Extract secret file from stego file
 // Extract secret file from stego file
 extractDataBtn.addEventListener("click", () => {
   console.log("Tombol Ekstraksi Ditekan");
