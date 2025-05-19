@@ -1,6 +1,6 @@
 # StegoCraft - Advanced Steganography Tool
 
-[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d2babd78566d3cede936c0bf2378ed00/media/badge.svg)](https://github.com/sindresorhus/awesome)
+[![Awesome](https://img.shields.io/badge/Awesome-%E2%98%BC-brightgreen)](https://github.com/sindresorhus/awesome)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/alii16/stegocraft/graphs/commit-activity)
 ![Project Size](https://img.shields.io/github/repo-size/alii16/stegocraft)
