@@ -442,283 +442,289 @@ const textResult = document.getElementById("text-result");
 
 // Delimiter untuk memisahkan cover text dan pesan tersembunyi
 const TEXT_DELIMITER = "\n|||SECRET|||";
+const WHITESPACE_END_MARKER = "#"; // Penanda khusus untuk whitespace
 
 // Fungsi konversi string ke binary (8-bit per karakter)
 function stringToBinary(str) {
-  let binary = "";
-  for (let i = 0; i < str.length; i++) {
-    binary += str.charCodeAt(i).toString(2).padStart(8, "0");
-  }
-  return binary;
+    let binary = "";
+    for (let i = 0; i < str.length; i++) {
+        binary += str.charCodeAt(i).toString(2).padStart(8, "0");
+    }
+    return binary;
 }
 
 // Fungsi untuk enkoding dengan metode Whitespace
 function encodeWhitespace(message) {
-  const binary = stringToBinary(message);
-  // Map '0' ke spasi dan '1' ke tab
-  let encoded = "";
-  for (const bit of binary) {
-    encoded += bit === "0" ? " " : "\t";
-  }
-  return encoded;
+    const binary = stringToBinary(message);
+    // Map '0' ke spasi dan '1' ke tab
+    let encoded = "";
+    for (const bit of binary) {
+        encoded += bit === "0" ? " " : "\t";
+    }
+    return encoded;
 }
 
 function decodeWhitespace(encoded) {
-  let binary = "";
-  for (const ch of encoded) {
-    if (ch === " ") binary += "0";
-    else if (ch === "\t") binary += "1";
-  }
-  let message = "";
-  for (let i = 0; i < binary.length; i += 8) {
-    let byte = binary.slice(i, i + 8);
-    message += String.fromCharCode(parseInt(byte, 2));
-  }
-  return message;
+    let binary = "";
+    for (const ch of encoded) {
+        if (ch === " ") binary += "0";
+        else if (ch === "\t") binary += "1";
+    }
+    let message = "";
+    for (let i = 0; i < binary.length; i += 8) {
+        let byte = binary.slice(i, i + 8);
+        message += String.fromCharCode(parseInt(byte, 2));
+    }
+    return message;
 }
 
 // Untuk metode Zero-Width, gunakan U+200B sebagai 0 dan U+200C sebagai 1
 const ZW0 = "\u200B";
 const ZW1 = "\u200C";
 function encodeZeroWidth(message) {
-  const binary = stringToBinary(message);
-  let encoded = "";
-  for (const bit of binary) {
-    encoded += bit === "0" ? ZW0 : ZW1;
-  }
-  return encoded;
+    const binary = stringToBinary(message);
+    let encoded = "";
+    for (const bit of binary) {
+        encoded += bit === "0" ? ZW0 : ZW1;
+    }
+    return encoded;
 }
 function decodeZeroWidth(encoded) {
-  let binary = "";
-  for (const ch of encoded) {
-    if (ch === ZW0) binary += "0";
-    else if (ch === ZW1) binary += "1";
-  }
-  let message = "";
-  for (let i = 0; i < binary.length; i += 8) {
-    let byte = binary.slice(i, i + 8);
-    message += String.fromCharCode(parseInt(byte, 2));
-  }
-  return message;
+    let binary = "";
+    for (const ch of encoded) {
+        if (ch === ZW0) binary += "0";
+        else if (ch === ZW1) binary += "1";
+    }
+    let message = "";
+    for (let i = 0; i < binary.length; i += 8) {
+        let byte = binary.slice(i, i + 8);
+        message += String.fromCharCode(parseInt(byte, 2));
+    }
+    return message;
 }
 
 // Untuk Homoglyph Substitution (contoh sederhana gunakan base64)
 function encodeHomoglyph(message) {
-  return btoa(message);
+    return btoa(message);
 }
 function decodeHomoglyph(encoded) {
-  return atob(encoded);
+    return atob(encoded);
 }
 
 // Hide Message
 hideTextBtn.addEventListener("click", () => {
-  const coverText = coverTextElem.value;
-  let secretMessage = secretTextElem.value;
-  if (!coverText || !secretMessage) {
-    Swal.fire({
-      title: "Info!",
-      text: "Please enter both cover text and secret message.",
-      icon: "info",
-      confirmButtonText: "OK",
-      customClass: {
-        confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
-      },
-    });
-    return;
-  }
-  let encryptionPrefix = "";
-  // Jika enkripsi diaktifkan, tambahkan marker "STEG:" ke pesan
-  if (document.getElementById("text-enable-encryption").checked) {
-    const pwd = document.getElementById("text-password").value;
-    if (!pwd) {
-      Swal.fire({
-        title: "Info!",
-        text: "Please enter encryption password for text message.",
-        icon: "info",
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
-        },
-      });
-      return;
+    const coverText = coverTextElem.value;
+    let secretMessage = secretTextElem.value;
+    if (!coverText || !secretMessage) {
+        Swal.fire({
+            title: "Info!",
+            text: "Please enter both cover text and secret message.",
+            icon: "info",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+            },
+        });
+        return;
     }
-    // Tambahkan marker "STEG:" sehingga setelah decrypt kita bisa validasi password
-    secretMessage = "STEG:" + secretMessage;
-    // Enkripsi pesan menggunakan XOR kemudian base64 encode
-    secretMessage = btoa(xorEncryptDecrypt(secretMessage, pwd));
-    encryptionPrefix = "ENC:";
-  }
-  const method = textStegoMethodSelect.value; // "whitespace", "zero-width", atau "homoglyph"
-  let encodedSecret = "";
-  if (method === "whitespace") {
-    encodedSecret =
-      encryptionPrefix + "WSPACE:" + encodeWhitespace(secretMessage);
-  } else if (method === "zero-width") {
-    encodedSecret =
-      encryptionPrefix + "ZWIDTH:" + encodeZeroWidth(secretMessage);
-  } else if (method === "homoglyph") {
-    encodedSecret = encryptionPrefix + "HG:" + encodeHomoglyph(secretMessage);
-  } else {
-    // fallback: gunakan base64
-    encodedSecret = encryptionPrefix + "HG:" + encodeHomoglyph(secretMessage);
-  }
-  const hiddenText = coverText + TEXT_DELIMITER + encodedSecret;
-  coverTextElem.value = hiddenText;
-  textResult.classList.remove("hidden");
-  textResult.innerHTML = `<div class='p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400' role='alert'>
-        <span class='font-medium'>Success!</span> Secret message has been hidden. You can now copy the modified cover text.
-        </div>`;
+    let encryptionPrefix = "";
+    // Jika enkripsi diaktifkan, tambahkan marker "STEG:" ke pesan
+    if (document.getElementById("text-enable-encryption").checked) {
+        const pwd = document.getElementById("text-password").value;
+        if (!pwd) {
+            Swal.fire({
+                title: "Info!",
+                text: "Please enter encryption password for text message.",
+                icon: "info",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        // Tambahkan marker "STEG:" sehingga setelah decrypt kita bisa validasi password
+        secretMessage = "STEG:" + secretMessage;
+        // Enkripsi pesan menggunakan XOR kemudian base64 encode
+        secretMessage = btoa(xorEncryptDecrypt(secretMessage, pwd));
+        encryptionPrefix = "ENC:";
+    }
+    const method = textStegoMethodSelect.value; // "whitespace", "zero-width", atau "homoglyph"
+    let encodedSecret = "";
+    if (method === "whitespace") {
+        encodedSecret =
+            encryptionPrefix + "WSPACE:" + encodeWhitespace(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret + WHITESPACE_END_MARKER; // Tambahkan "#"
+    } else if (method === "zero-width") {
+        encodedSecret =
+            encryptionPrefix + "ZWIDTH:" + encodeZeroWidth(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret;
+    } else if (method === "homoglyph") {
+        encodedSecret = encryptionPrefix + "HG:" + encodeHomoglyph(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret;
+    } else {
+        // fallback: gunakan base64
+        encodedSecret = encryptionPrefix + "HG:" + encodeHomoglyph(secretMessage);
+        coverTextElem.value = coverText + TEXT_DELIMITER + encodedSecret;
+    }
+    textResult.classList.remove("hidden");
+    textResult.innerHTML = `<div class='p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400' role='alert'>
+            <span class='font-medium'>Success!</span> Secret message has been hidden. You can now copy the modified cover text.
+            </div>`;
 });
 
 // Extract Message
 extractTextBtn.addEventListener("click", () => {
-  const coverText = coverTextElem.value;
-  if (!coverText.includes(TEXT_DELIMITER)) {
-    Swal.fire({
-      title: "Info!",
-      text: "No hidden secret message found in the cover text.",
-      icon: "info",
-      confirmButtonText: "OK",
-      customClass: {
-        confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
-      },
-    });
-    return;
-  }
-  const parts = coverText.split(TEXT_DELIMITER);
-  const encodedPart = parts[1] || "";
+    const coverText = coverTextElem.value;
+    if (!coverText.includes(TEXT_DELIMITER)) {
+        Swal.fire({
+            title: "Info!",
+            text: "No hidden secret message found in the cover text.",
+            icon: "info",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+            },
+        });
+        return;
+    }
+    const parts = coverText.split(TEXT_DELIMITER);
+    let encodedPart = parts[1] || "";
 
-  // Pastikan metode dekripsi yang dipilih sama dengan metode yang digunakan saat enkripsi
-  const selectedMethod = textStegoMethodSelect.value; // "whitespace", "zero-width", "homoglyph"
-  let expectedPrefix = "";
-  if (selectedMethod === "whitespace") {
-    expectedPrefix = "WSPACE:";
-  } else if (selectedMethod === "zero-width") {
-    expectedPrefix = "ZWIDTH:";
-  } else if (selectedMethod === "homoglyph") {
-    expectedPrefix = "HG:";
-  } else {
-    Swal.fire({
-      title: "Error!",
-      text: "Unknown text steganography method.",
-      icon: "error",
-      confirmButtonText: "OK",
-      customClass: {
-        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
-      },
-    });
-    return;
-  }
-  // Cek apakah encodedPart dimulai dengan prefix yang tepat (boleh diawali "ENC:" bila terenkripsi)
-  if (
-    !(
-      encodedPart.startsWith("ENC:" + expectedPrefix) ||
-      encodedPart.startsWith(expectedPrefix)
-    )
-  ) {
-    Swal.fire({
-      title: "Error!",
-      text: "Mismatched decryption algorithm. Please select the correct method.",
-      icon: "error",
-      confirmButtonText: "OK",
-      customClass: {
-        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
-      },
-    });
-    return;
-  }
+    // Pastikan metode dekripsi yang dipilih sama dengan metode yang digunakan saat enkripsi
+    const selectedMethod = textStegoMethodSelect.value; // "whitespace", "zero-width", "homoglyph"
+    let decodedMessage = "";
+    let isEncrypted = false;
+    let payload = "";
 
-  let decodedMessage = "";
-  let isEncrypted = false;
-  let payload = "";
-  if (encodedPart.startsWith("ENC:WSPACE:")) {
-    isEncrypted = true;
-    payload = encodedPart.slice("ENC:WSPACE:".length);
-    decodedMessage = decodeWhitespace(payload);
-  } else if (encodedPart.startsWith("WSPACE:")) {
-    payload = encodedPart.slice("WSPACE:".length);
-    decodedMessage = decodeWhitespace(payload);
-  } else if (encodedPart.startsWith("ENC:ZWIDTH:")) {
-    isEncrypted = true;
-    payload = encodedPart.slice("ENC:ZWIDTH:".length);
-    decodedMessage = decodeZeroWidth(payload);
-  } else if (encodedPart.startsWith("ZWIDTH:")) {
-    payload = encodedPart.slice("ZWIDTH:".length);
-    decodedMessage = decodeZeroWidth(payload);
-  } else if (encodedPart.startsWith("ENC:HG:")) {
-    isEncrypted = true;
-    payload = encodedPart.slice("ENC:HG:".length);
-    decodedMessage = decodeHomoglyph(payload);
-  } else if (encodedPart.startsWith("HG:")) {
-    payload = encodedPart.slice("HG:".length);
-    decodedMessage = decodeHomoglyph(payload);
-  } else {
-    try {
-      decodedMessage = atob(encodedPart);
-    } catch (err) {
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to extract secret message: " + err,
-        icon: "error",
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
-        },
-      });
-      return;
+    if (selectedMethod === "whitespace") {
+        if (encodedPart.endsWith(WHITESPACE_END_MARKER)) {
+            encodedPart = encodedPart.slice(0, -WHITESPACE_END_MARKER.length); // Hapus "#"
+        }
+        if (encodedPart.startsWith("ENC:WSPACE:")) {
+            isEncrypted = true;
+            payload = encodedPart.slice("ENC:WSPACE:".length);
+        } else if (encodedPart.startsWith("WSPACE:")) {
+            payload = encodedPart.slice("WSPACE:".length);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Expected whitespace-encoded message.",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        decodedMessage = decodeWhitespace(payload);
+    } else if (selectedMethod === "zero-width") {
+        if (encodedPart.startsWith("ENC:ZWIDTH:")) {
+            isEncrypted = true;
+            payload = encodedPart.slice("ENC:ZWIDTH:".length);
+        } else if (encodedPart.startsWith("ZWIDTH:")) {
+            payload = encodedPart.slice("ZWIDTH:".length);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Expected zero-width encoded message.",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        decodedMessage = decodeZeroWidth(payload);
+    } else if (selectedMethod === "homoglyph") {
+        if (encodedPart.startsWith("ENC:HG:")) {
+            isEncrypted = true;
+            payload = encodedPart.slice("ENC:HG:".length);
+        } else if (encodedPart.startsWith("HG:")) {
+            payload = encodedPart.slice("HG:".length);
+        } else {
+            try {
+                decodedMessage = atob(encodedPart);
+            } catch (err) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to extract secret message: " + err,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    customClass: {
+                        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                    },
+                });
+                return;
+            }
+        }
+        decodedMessage = decodeHomoglyph(payload);
+    } else {
+        Swal.fire({
+            title: "Error!",
+            text: "Unknown text steganography method.",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+            },
+        });
+        return;
     }
-  }
-  // Jika pesan sebelumnya terenkripsi, lakukan dekripsi
-  if (isEncrypted) {
-    const pwd = document.getElementById("text-password").value;
-    if (!pwd) {
-      Swal.fire({
-        title: "Info!",
-        text: "Encryption password required to decrypt message.",
-        icon: "info",
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
-        },
-      });
-      return;
+
+    // Jika pesan sebelumnya terenkripsi, lakukan dekripsi
+    if (isEncrypted) {
+        const pwd = document.getElementById("text-password").value;
+        if (!pwd) {
+            Swal.fire({
+                title: "Info!",
+                text: "Encryption password required to decrypt message.",
+                icon: "info",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        try {
+            decodedMessage = xorEncryptDecrypt(atob(decodedMessage), pwd);
+        } catch (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to decrypt message: " + err,
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        // Validasi marker pesan (misal "STEG:")
+        const marker = "STEG:";
+        if (!decodedMessage.startsWith(marker)) {
+            Swal.fire({
+                title: "Error!",
+                text: "Incorrect password. Unable to decrypt secret message.",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+                },
+            });
+            return;
+        }
+        // Hapus marker sebelum menampilkan pesan
+        decodedMessage = decodedMessage.slice(marker.length);
     }
-    try {
-      decodedMessage = xorEncryptDecrypt(atob(decodedMessage), pwd);
-    } catch (err) {
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to decrypt message: " + err,
-        icon: "error",
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
-        },
-      });
-      return;
-    }
-    // Validasi marker pesan (misal "STEG:")
-    const marker = "STEG:";
-    if (!decodedMessage.startsWith(marker)) {
-      Swal.fire({
-        title: "Error!",
-        text: "Incorrect password. Unable to decrypt secret message.",
-        icon: "error",
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
-        },
-      });
-      return;
-    }
-    // Hapus marker sebelum menampilkan pesan
-    decodedMessage = decodedMessage.slice(marker.length);
-  }
-  secretTextElem.value = decodedMessage;
-  textResult.classList.remove("hidden");
-  textResult.innerHTML = `<div class='p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400' role='alert'>
-            <span class='font-medium'>Success!</span> Secret message extracted and populated in the secret message field.
-        </div>`;
+    secretTextElem.value = decodedMessage;
+    textResult.classList.remove("hidden");
+    textResult.innerHTML = `<div class='p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400' role='alert'>
+                    <span class='font-medium'>Success!</span> Secret message extracted and populated in the secret message field.
+                </div>`;
 });
 // Toggle password visibility handlers (existing)
 document.getElementById("toggle-password")?.addEventListener("click", () => {
