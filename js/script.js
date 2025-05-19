@@ -166,6 +166,17 @@ hideDataBtn.addEventListener("click", () => {
   const secretReader = new FileReader();
   let coverDataURL = "";
   let secretDataURL = "";
+  let errorOccurred = false; // Flag untuk menandai jika terjadi error
+
+  Swal.fire({
+    title: "Processing...",
+    text: "Please wait while we process your files this can take seconds.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
 
   coverReader.onload = function (e) {
     coverDataURL = e.target.result;
@@ -181,11 +192,44 @@ hideDataBtn.addEventListener("click", () => {
     }
   };
 
+  coverReader.onerror = function (error) {
+    errorOccurred = true;
+    Swal.close();
+    Swal.fire({
+      title: "Error!",
+      text: "Failed to read cover file: " + error,
+      icon: "error",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+      },
+    });
+    console.error("Failed to read cover file:", error);
+  };
+
+  secretReader.onerror = function (error) {
+    errorOccurred = true;
+    Swal.close();
+    Swal.fire({
+      title: "Error!",
+      text: "Failed to read secret file: " + error,
+      icon: "error",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "bg-red-600 text-white hover:bg-indigo-700",
+      },
+    });
+    console.error("Failed to read secret file:", error);
+  };
+
   coverReader.readAsDataURL(coverFile);
   secretReader.readAsDataURL(secretFile);
 
   // Pada proses enkripsi file (hideDataBtn)
   function processStego() {
+    if (errorOccurred) {
+      return; // Hentikan proses jika sudah terjadi error
+    }
     if (useEncryption && password) {
       // Tambahkan marker "STEGFILE:" ke data asli agar bisa divalidasi saat dekripsi
       secretDataURL = "STEGFILE:" + secretDataURL;
@@ -205,9 +249,9 @@ hideDataBtn.addEventListener("click", () => {
     downloadStegoLink.href = url;
     downloadStegoLink.style.display = "inline-block";
     hideResult.classList.remove("hidden");
+    Swal.close(); // Tutup loading setelah proses berhasil
   }
 });
-
 // Extract secret file from stego file
 const stegoFileInput = document.getElementById("stego-file");
 const extractDataBtn = document.getElementById("extract-data-btn");
@@ -245,6 +289,16 @@ extractDataBtn.addEventListener("click", () => {
   }
   const stegoFile = stegoFileInput.files[0];
   const reader = new FileReader();
+  Swal.fire({
+    title: "Extracting...",
+    text: "Please wait while we extract the secret file this can take a while.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
   reader.onload = function (e) {
     try {
       console.log("FileReader Onload Dipanggil");
@@ -261,6 +315,7 @@ extractDataBtn.addEventListener("click", () => {
         // Validasi marker "STEGFILE:" untuk memastikan password benar
         const marker = "STEGFILE:";
         if (!secretData.startsWith(marker)) {
+          Swal.close();
           Swal.fire({
             title: "Error!",
             text: "Incorrect password for file decryption. Extraction failed.",
@@ -306,7 +361,6 @@ extractDataBtn.addEventListener("click", () => {
 
       if (mimeType.startsWith("image/")) {
         const img = document.createElement("img");
-        // Gunakan secretData (Data URL asli) sebagai src
         img.src = secretData;
         img.className = "max-h-48 rounded-lg";
         extractedPreview.appendChild(img);
@@ -322,14 +376,45 @@ extractDataBtn.addEventListener("click", () => {
         video.controls = true;
         video.className = "max-h-48 rounded-lg";
         extractedPreview.appendChild(video);
+      } else if (mimeType === "application/pdf") {
+        const img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png"; // ikon PDF
+        img.alt = "PDF File";
+        img.className = "h-16 mx-auto";
+        extractedPreview.appendChild(img);
+      } else if (
+        mimeType === "application/msword" ||
+        mimeType ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ) {
+        const img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/512/337/337932.png"; // ikon Word
+        img.alt = "Word File";
+        img.className = "h-16 mx-auto";
+        extractedPreview.appendChild(img);
+      } else if (
+        mimeType === "application/vnd.ms-excel" ||
+        mimeType ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ) {
+        const img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/512/732/732011.png"; // ikon Excel
+        img.alt = "Excel File";
+        img.className = "h-16 mx-auto";
+        extractedPreview.appendChild(img);
       } else {
-        extractedPreview.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400">No preview available for this file type.</p>`;
+        extractedPreview.innerHTML = `
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            No preview available for this file type.
+          </p>`;
       }
 
       // Tampilkan container preview dengan mengubah style.display
+      Swal.close(); // setelah proses berhasil
       extractedPreviewContainer.style.display = "block";
       extractResult.style.display = "block";
     } catch (err) {
+      Swal.close();
       Swal.fire({
         title: "Error!",
         text: "Failed to extract data: " + err,
